@@ -7,6 +7,7 @@ export ZSH=$SSHHOME/.sshrc.d/.oh-my-zsh
 # ZSH_THEME="sorin"
 ZSH_THEME="avit"
 
+# Without this on RancherOS when Backspace is pressed, the cursor moves to the right instead of deleting characters.
 if [[ $(uname -a) = *"rancher"* ]]; then
   TERM=xterm
 fi
@@ -28,6 +29,13 @@ alias certbot='sudo docker run -it --rm --name certbot \
 alias dci=docker_install
 
 docker_install() {
-    docker run --rm -v /opt/bin:/target unchain/install-$1
-    docker rmi unchain/install-$1
+    installer=$1
+
+    # default to ohmyssh images
+    if [[ ! $installer = *"/"* ]]; then
+      installer=ohmyssh/$installer
+    fi
+
+    docker run --rm -v /opt/bin:/target $installer
+    docker rmi $installer
 }
