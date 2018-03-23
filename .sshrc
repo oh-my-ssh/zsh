@@ -1,0 +1,11 @@
+# install zsh
+command -v /opt/bin/zsh >/dev/null 2>&1 || { 
+    docker run --rm -v /opt/bin:/target unchain/install-zsh
+    docker rmi unchain/install-zsh  
+}
+
+export ZDOTDIR=$SSHHOME/.sshrc.d/
+
+if [ -t 1 ]; then
+    exec /opt/bin/zsh
+fi
