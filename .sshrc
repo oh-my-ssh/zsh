@@ -1,12 +1,20 @@
-# install zsh if not yet available
-
-command -v /opt/bin/zsh >/dev/null 2>&1 || { 
-    docker run --rm -v /opt/bin:/target ohmyssh/zsh
-    docker rmi ohmyssh/zsh 
-}
-
+# configure zsh to use the right .zshrc file
 export ZDOTDIR=$SSHHOME/.sshrc.d/
 
+# if zsh is missing, install it via an available method, e.g. apt-get or docker.
+if ! [ -x "$(command -v /opt/bin/zsh)" -o -x "$(command -v zsh)" ]; then
+    if [ -x "$(command -v apt-get)" ]; then
+        sudo apt-get install zsh
+    elif [ -x "$(command -v docker)" ]; then
+        docker run --rm -v /opt/bin:/target ohmyssh/zsh
+        docker rmi ohmyssh/zsh 
+    fi
+fi
+
 if [ -t 1 ]; then
-    exec /opt/bin/zsh
+    if [ -x "$(command -v /opt/bin/zsh)" ]; then
+        exec /opt/bin/zsh
+    elif [ -x "$(command -v zsh)" ]; then
+        exec zsh
+    fi
 fi
