@@ -7,10 +7,8 @@ export ZSH=$SSHHOME/.sshrc.d/.oh-my-zsh
 # ZSH_THEME="sorin"
 ZSH_THEME="avit"
 
-# Without this on RancherOS when Backspace is pressed, the cursor moves to the right instead of deleting characters.
-if [[ $(uname -a) = *"rancher"* ]]; then
-  TERM=xterm
-fi
+# Without this on some operating systems such as RancherOS when Backspace is pressed, the cursor moves to the right instead of deleting characters.
+TERM=xterm
 
 plugins=(git z sudo zsh-autosuggestions)
 
